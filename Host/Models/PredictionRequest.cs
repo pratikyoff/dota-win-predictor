@@ -11,5 +11,6 @@ namespace Host.Models
         public List<int> AllyHeroIds { get; set; } = new List<int>();
         public List<int> EnemyHeroIds { get; set; } = new List<int>();
         public bool IsRadiant { get; set; }
+        public string SteamId { get; set; }
     }
 }

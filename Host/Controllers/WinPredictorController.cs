@@ -1,22 +1,23 @@
 ﻿using Host.Models;
+using Host.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace Host.Controllers
 {
     [Route("api/predict")]
     public class WinPredictorController : Controller
     {
-        [HttpPost]
-        public Guid GenerateStatusIdOfRequest([FromBody]PredictionRequest predictionRequest)
+        WinPredictorService winPredictorService;
+
+        public WinPredictorController()
         {
-            return Guid.NewGuid();
+            winPredictorService = new WinPredictorService();
         }
 
-        [HttpGet("result/{reqId}")]
-        public AlgoOutput GetResponseStatusFromRequestId([FromRoute]string reqId)
+        [HttpPost]
+        public double GetResult([FromBody]PredictionRequest predictionRequest)
         {
-            return new AlgoOutput();
+            return winPredictorService.GetResult(predictionRequest);
         }
     }
 }

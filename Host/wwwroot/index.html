@@ -5,6 +5,98 @@
     <title>Home</title>
 </head>
 <body>
-    Dota Win Predictor
+    <h1>Dota Win Predictor</h1>
+
+    <div>
+        <div>
+            Select your hero
+            <select class = "sel" onchange="setOwn(this)">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+        <p id="msg"></p>
+        <div>
+            Select allied hero 1 <!--we need to make 4 more boxes here maybe 4 div-->
+
+            <select class = "sel" onchange="setAlly(this)">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+        
+        <div>
+            Select allied hero 2 <!--we need to make 4 more boxes here maybe 4 div-->
+
+            <select class = "sel" onchange="setAlly(this)">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+        
+        <div>
+            Select allied hero 3 <!--we need to make 4 more boxes here maybe 4 div-->
+
+            <select class = "sel" onchange="setAlly(this)">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+        
+        <div>
+            Select allied hero 4 <!--we need to make 4 more boxes here maybe 4 div-->
+
+            <select class = "sel" onchange="setAlly(this)">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+        
+
+        <div>
+            Select opponent 1 <!--5 boxes-->
+            <select class = "sel" onchange="setEnemy(this)">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+        
+
+        <div>
+            Select opponent 2 <!--5 boxes-->
+            <select class = "sel" onchange="setEnemy(this)">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+        
+
+        <div>
+            Select opponent 3 <!--5 boxes-->
+            <select class = "sel" onchange="setEnemy(this)">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+        
+
+        <div>
+            Select opponent 4 <!--5 boxes-->
+            <select class = "sel" onchange="setEnemy(this)">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+       
+
+        <div>
+            Select opponent 5 <!--5 boxes-->
+            <select class = "sel" onchange="setEnemy(this)">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+       <div>
+           Select Radient or Dire
+           <select id= "side" onchange="setSide(this);">
+               <option>Select Side</option>
+               <option>Radient</option>
+               <option>Dire</option>
+           </select>
+       </div>
+        <button onclick="_submitButton"> Submit </button>
+    </div>
 </body>
+<script type="text/javascript" src="hero.js"></script>
+<script type="text/javascript" src="script.js"></script>
 </html>

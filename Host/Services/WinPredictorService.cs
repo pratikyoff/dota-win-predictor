@@ -15,7 +15,7 @@ namespace Host.Services
 
             Predictor predictor = new Predictor();
 
-            return predictor.Predict(input).GetAwaiter().GetResult();
+            return predictor.Predict(input, predictionRequest.SteamId).GetAwaiter().GetResult();
         }
     }
 }

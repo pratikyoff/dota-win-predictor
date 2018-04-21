@@ -1,8 +1,8 @@
 ﻿populateSelect();
 var side;
-var allyHeros[];
+var allyHeros = [];
 var ownHero;
-var enemyHeros[];
+var enemyHeros = [];
 
 
 function setSide(s) {
@@ -15,11 +15,11 @@ function populateSelect() {
 
     var ele = document.getElementsByClassName('sel');
     for (var j = 0; j < ele.length; j++) {
-    for (var i = 0; i < heroes.length; i++) {
-        // POPULATE SELECT ELEMENT WITH JSON.
-        ele[j].innerHTML = ele[j].innerHTML +
-            '<option value="' + heroes[i]['id'] + '">' + heroes[i]['localized_name'] + '</option>';
-    }
+        for (var i = 0; i < heroes.length; i++) {
+            // POPULATE SELECT ELEMENT WITH JSON.
+            ele[j].innerHTML = ele[j].innerHTML +
+                '<option value="' + heroes[i]['id'] + '">' + heroes[i]['localized_name'] + '</option>';
+        }
     }
 }
 

@@ -7,8 +7,14 @@ namespace WinPredictor
     {
         public async Task<double> Predict(List<int> input, string steamId)
         {
-            InputBuilder inputBuilder = new InputBuilder();
             return 0.5;
+        }
+
+        private async Task<List<List<int>>> GetLearningConditions(string steamId)
+        {
+            InputBuilder inputBuilder = new InputBuilder();
+            var input = await inputBuilder.Build(steamId);
+            return input;
         }
     }
 }

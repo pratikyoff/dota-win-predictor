@@ -1,5 +1,4 @@
-﻿using Accord.MachineLearning;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace WinPredictor
@@ -8,6 +7,7 @@ namespace WinPredictor
     {
         public async Task<double> Predict(List<int> input, string steamId)
         {
+            InputBuilder inputBuilder = new InputBuilder();
             return 0.5;
         }
     }

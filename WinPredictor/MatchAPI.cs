@@ -20,8 +20,13 @@ namespace WinPredictor
 
         public async static Task<dynamic> GetMatchDetails(string matchId)
         {
+            LocalMatchStore localMatchStore = new LocalMatchStore();
+            if (localMatchStore.CheckIfPresent(matchId))
+                return localMatchStore.GetMatchDetails(matchId);
+
             var response = await httpClient.GetStringAsync($"https://api.opendota.com/api/matches/{matchId}");
             var json = JsonConvert.DeserializeObject<dynamic>(response);
+            localMatchStore.StoreMatch(json);
             return json;
         }
     }

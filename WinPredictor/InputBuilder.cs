@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WinPredictor
@@ -18,59 +20,75 @@ namespace WinPredictor
                 matchIds.Add(matchId);
             }
 
-            var tasks = new List<Task>();
             foreach (var matchId in matchIds)
             {
-                var task = Task.Run(async () =>
+                bool retry = true;
+                int counter = 0;
+                while (retry)
                 {
-                    var matchDetails = await MatchAPI.GetMatchDetails(matchId);
-                    int ownHeroId = 0;
-                    List<int> allyHeroIds = new List<int>();
-                    List<int> enemyHeroIds = new List<int>();
-                    bool isRadiant = false;
-                    int radiantOrDire = 0;
-                    foreach (var playerInfo in matchDetails.players)
+                    try
                     {
-                        if ((string)playerInfo.account_id == steamId)
-                        {
-                            ownHeroId = playerInfo.hero_id;
-                            isRadiant = playerInfo.isRadiant;
-                            radiantOrDire = isRadiant ? 0 : 1;
-                            break;
-                        }
+                        await GetInputs(steamId, input, matchId);
+                        retry = false;
                     }
-                    foreach (var playerInfo in matchDetails.players)
+                    catch (Exception exception)
                     {
-                        if ((string)playerInfo.account_id != steamId)
-                        {
-                            if (playerInfo.isRadiant == isRadiant)
-                            {
-                                allyHeroIds.Add((int)playerInfo.hero_id);
-                            }
-                            else
-                            {
-                                enemyHeroIds.Add((int)playerInfo.hero_id);
-                            }
-                        }
+                        counter++;
+                        retry = true;
+                        if (counter > 10)
+                            throw exception;
+                        Thread.Sleep(counter * 1000);
                     }
-                    var allyPermutations = Permutator.Permute(allyHeroIds);
-                    var enemyPermutations = Permutator.Permute(enemyHeroIds);
-                    foreach (var allyPermutation in allyPermutations)
-                    {
-                        foreach (var enemyPermutation in enemyPermutations)
-                        {
-                            var oneCompletePermutation = new List<int>() { ownHeroId };
-                            oneCompletePermutation.AddRange(allyPermutation);
-                            oneCompletePermutation.AddRange(enemyPermutation);
-                            oneCompletePermutation.Add(radiantOrDire);
-                            input.Add(oneCompletePermutation);
-                        }
-                    }
-                });
-                tasks.Add(task);
+                }
             }
-            Task.WaitAll(tasks.ToArray());
             return input;
+        }
+
+        private static async Task GetInputs(string steamId, List<List<int>> input, string matchId)
+        {
+            var matchDetails = await MatchAPI.GetMatchDetails(matchId);
+            int ownHeroId = 0;
+            List<int> allyHeroIds = new List<int>();
+            List<int> enemyHeroIds = new List<int>();
+            bool isRadiant = false;
+            int radiantOrDire = 0;
+            foreach (var playerInfo in matchDetails.players)
+            {
+                if ((string)playerInfo.account_id == steamId)
+                {
+                    ownHeroId = playerInfo.hero_id;
+                    isRadiant = playerInfo.isRadiant;
+                    radiantOrDire = isRadiant ? 0 : 1;
+                    break;
+                }
+            }
+            foreach (var playerInfo in matchDetails.players)
+            {
+                if ((string)playerInfo.account_id != steamId)
+                {
+                    if (playerInfo.isRadiant == isRadiant)
+                    {
+                        allyHeroIds.Add((int)playerInfo.hero_id);
+                    }
+                    else
+                    {
+                        enemyHeroIds.Add((int)playerInfo.hero_id);
+                    }
+                }
+            }
+            var allyPermutations = Permutator.Permute(allyHeroIds);
+            var enemyPermutations = Permutator.Permute(enemyHeroIds);
+            foreach (var allyPermutation in allyPermutations)
+            {
+                foreach (var enemyPermutation in enemyPermutations)
+                {
+                    var oneCompletePermutation = new List<int>() { ownHeroId };
+                    oneCompletePermutation.AddRange(allyPermutation);
+                    oneCompletePermutation.AddRange(enemyPermutation);
+                    oneCompletePermutation.Add(radiantOrDire);
+                    input.Add(oneCompletePermutation);
+                }
+            }
         }
     }
 }

@@ -1,14 +1,20 @@
 ﻿populateSelect();
-var side;
+var isRadiant = true
 var allyHeros = [];
 var ownHero;
 var enemyHeros = [];
+var playerId;
 
 
 function setSide(s) {
-    side = s.options[s.selectedIndex].text;
+    var side = s.options[s.selectedIndex].text;
+    if (side === 'Dire') {
+        isRadiant = false;
+    }
 }
 function _submitButton() {
+
+    playerId = _getPlayerId()
 
 }
 function populateSelect() {
@@ -32,6 +38,10 @@ function setAlly(n) {
 }
 function setEnemy(n) {
     enemyHeros.push(n.value);
+}
+
+function _getPlayerId() {
+    return document.getElementById('playerId');
 }
 
 function show(ele) {

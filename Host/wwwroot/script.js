@@ -12,13 +12,13 @@ function setSide(s) {
         isRadiant = false;
     }
 }
-function _submitButton() {
+//function _submitButton() {
 
-    playerId = _getPlayerId()
+//    playerId = _getPlayerId()
 
-}
+//}
 function populateSelect() {
-
+    
     var ele = document.getElementsByClassName('sel');
     for (var j = 0; j < ele.length; j++) {
         for (var i = 0; i < heroes.length; i++) {
@@ -29,19 +29,33 @@ function populateSelect() {
     }
 }
 
+$("button").click(function () {
+    playerId = _getPlayerId()
+    $.post("api/predict",
+        {
+            ownHeroId : ownHero,
+            allyHeroIds : allyHeros,
+            enemyHeroIds : enemyHeros,
+            isRadiant : isRadiant,
+            steamId : playerId
+        },
+        function (data) {
+            alert("Data: " + data + "\nStatus: ");
+        });
+});
 
 function setOwn(n) {
-    ownHero = n.value;
+    ownHero = parseFloat(n.value);
 }
 function setAlly(n) {
-    allyHeros.push(n.value);
+    allyHeros.push(parseInt(n.value));
 }
 function setEnemy(n) {
-    enemyHeros.push(n.value);
+    enemyHeros.push(parseInt(n.value));
 }
 
 function _getPlayerId() {
-    return document.getElementById('playerId');
+    return String(document.getElementById('playerId').value);
 }
 
 function show(ele) {

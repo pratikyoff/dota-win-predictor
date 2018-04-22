@@ -8,7 +8,7 @@ namespace WinPredictor
 {
     public class LocalMatchStore
     {
-        private string _directory = "matches";
+        private string _directory = "D:\\data\\Match Details";
 
         public LocalMatchStore()
         {

@@ -12,8 +12,8 @@ namespace Fixture
         [Fact]
         public async void BuildFixture()
         {
-            InputBuilder inputBuilder = new InputBuilder();
-            var a = await inputBuilder.Build("343123158");
+            InOutBuilder inputBuilder = new InOutBuilder();
+            var a = await inputBuilder.BuildInput("190500077");
             Assert.NotNull(a);
         }
     }

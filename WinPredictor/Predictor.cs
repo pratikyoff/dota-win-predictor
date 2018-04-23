@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Accord.MachineLearning.VectorMachines.Learning;
 using Accord.Statistics.Kernels;
+using Accord.MachineLearning.VectorMachines;
 
 namespace WinPredictor
 {
@@ -9,16 +10,25 @@ namespace WinPredictor
     {
         public async Task<double> Predict(List<int> inputToPredict, string steamId)
         {
-            var input = await GetInput(steamId);
-            var output = await GetOutput(steamId);
-
-            var teacher = new SequentialMinimalOptimization<Gaussian>()
+            SupportVectorMachine<Gaussian> svm;
+            if (MLEngineStore.Store.ContainsKey(steamId))
             {
-                UseComplexityHeuristic = true,
-                UseKernelEstimation = true
-            };
+                svm = MLEngineStore.Store[steamId];
+            }
+            else
+            {
+                var input = await GetInput(steamId);
+                var output = await GetOutput(steamId);
 
-            var svm = teacher.Learn(input, output);
+                var teacher = new SequentialMinimalOptimization<Gaussian>()
+                {
+                    UseComplexityHeuristic = true,
+                    UseKernelEstimation = true
+                };
+
+                svm = teacher.Learn(input, output);
+                MLEngineStore.Store.Add(steamId, svm);
+            }
 
             double[] convertedInputToPredict = ConvertToDoubleArray(inputToPredict);
 

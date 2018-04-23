@@ -18,7 +18,6 @@ function setSide(s) {
 
 //}
 function populateSelect() {
-    
     var ele = document.getElementsByClassName('sel');
     for (var j = 0; j < ele.length; j++) {
         for (var i = 0; i < heroes.length; i++) {
@@ -31,17 +30,22 @@ function populateSelect() {
 
 $("button").click(function () {
     playerId = _getPlayerId()
-    $.post("api/predict",
-        {
-            ownHeroId : ownHero,
-            allyHeroIds : allyHeros,
-            enemyHeroIds : enemyHeros,
-            isRadiant : isRadiant,
-            steamId : playerId
-        },
-        function (data) {
+    var objToSend = {
+        ownHeroId: ownHero,
+        allyHeroIds: allyHeros,
+        enemyHeroIds: enemyHeros,
+        isRadiant: isRadiant,
+        steamId: playerId
+    };
+    $.ajax({
+        url: "api/predict",
+        type: "POST",
+        data: JSON.stringify(objToSend),
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
             alert("Data: " + data + "\nStatus: ");
-        });
+        }
+    })
 });
 
 function setOwn(n) {

@@ -45,3 +45,19 @@ header {
     flex-wrap: wrap;
     border: 2px solid red;
 }
+
+#hero-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.hero_image {
+    width: 127px;
+    height: 71px;
+}
+
+.selected {
+    border: 10px solid black !important;
+}

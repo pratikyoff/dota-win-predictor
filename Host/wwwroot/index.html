@@ -1,108 +1,33 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8" />
-    <title>Home</title>
+    <title>Dota Win Predictor</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
 </head>
+
 <body>
-    <h1>Dota Win Predictor</h1>
-
-    <div>
-        <div>
-            Select your hero
-            <select class = "sel" onchange="setOwn(this)">
-                <option value="">-- Select --</option>
-            </select>
+    <header>Dota Win Predictor</header>
+    <div id="input-container">
+        <div class="input_image" id="own_hero"></div>
+        <div id="ally_container">
+            <div class="input_image" id="ally1"></div>
+            <div class="input_image" id="ally3"></div>
+            <div class="input_image" id="ally2"></div>
+            <div class="input_image" id="ally4"></div>
         </div>
-        <p id="msg"></p>
-        <div>
-            Select allied hero 1 <!--we need to make 4 more boxes here maybe 4 div-->
-
-            <select class = "sel" onchange="setAlly(this)">
-                <option value="">-- Select --</option>
-            </select>
+        <div id="enemy_container">
+            <div class="input_image" id="enemy1"></div>
+            <div class="input_image" id="enemy2"></div>
+            <div class="input_image" id="enemy3"></div>
+            <div class="input_image" id="enemy4"></div>
+            <div class="input_image" id="enemy5"></div>
         </div>
-        
-        <div>
-            Select allied hero 2 <!--we need to make 4 more boxes here maybe 4 div-->
-
-            <select class = "sel" onchange="setAlly(this)">
-                <option value="">-- Select --</option>
-            </select>
-        </div>
-        
-        <div>
-            Select allied hero 3 <!--we need to make 4 more boxes here maybe 4 div-->
-
-            <select class = "sel" onchange="setAlly(this)">
-                <option value="">-- Select --</option>
-            </select>
-        </div>
-        
-        <div>
-            Select allied hero 4 <!--we need to make 4 more boxes here maybe 4 div-->
-
-            <select class = "sel" onchange="setAlly(this)">
-                <option value="">-- Select --</option>
-            </select>
-        </div>
-        
-
-        <div>
-            Select opponent 1 <!--5 boxes-->
-            <select class = "sel" onchange="setEnemy(this)">
-                <option value="">-- Select --</option>
-            </select>
-        </div>
-        
-
-        <div>
-            Select opponent 2 <!--5 boxes-->
-            <select class = "sel" onchange="setEnemy(this)">
-                <option value="">-- Select --</option>
-            </select>
-        </div>
-        
-
-        <div>
-            Select opponent 3 <!--5 boxes-->
-            <select class = "sel" onchange="setEnemy(this)">
-                <option value="">-- Select --</option>
-            </select>
-        </div>
-        
-
-        <div>
-            Select opponent 4 <!--5 boxes-->
-            <select class = "sel" onchange="setEnemy(this)">
-                <option value="">-- Select --</option>
-            </select>
-        </div>
-       
-
-        <div>
-            Select opponent 5 <!--5 boxes-->
-            <select class = "sel" onchange="setEnemy(this)">
-                <option value="">-- Select --</option>
-            </select>
-        </div>
-       <div>
-           Select Radiant or Dire
-           <select id= "side" onchange="setSide(this);">
-               <option>Select Side</option>
-               <option>Radiant</option>
-               <option>Dire</option>
-           </select>
-       </div>
-        <div>
-            <input type="text" name="Enter Player Id" value="bb" id="playerId"/>
-        </div>
-        <button> Submit </button>
     </div>
+    <div id="hero-container"></div>
+    <div id="result-container">qwer</div>
 </body>
-<script src="http://code.jquery.com/jquery-3.3.1.js"
-        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-        crossorigin="anonymous"></script>
-<script type="text/javascript" src="hero.js"></script>
-<script type="text/javascript" src="script.js"></script>
+
 </html>

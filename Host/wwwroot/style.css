@@ -1,0 +1,47 @@
+body {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
+    font-family: 'Roboto', sans-serif;
+}
+
+header {
+    text-align: center;
+    font-size: 2em;
+    margin: 10px;
+}
+
+.input_image {
+    width: 127px;
+    height: 71px;
+}
+
+#input-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 1px;
+}
+
+#own_hero {
+    margin: 5px;
+    border: 2px solid yellow;
+}
+
+#ally_container {
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border: 2px solid green;
+}
+
+#enemy_container {
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border: 2px solid red;
+}

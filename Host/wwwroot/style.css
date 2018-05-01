@@ -25,7 +25,7 @@ header {
     padding: 1px;
 }
 
-#own_hero {
+#in0 {
     margin: 5px;
     border: 2px solid yellow;
 }
@@ -58,6 +58,31 @@ header {
     height: 71px;
 }
 
-.selected {
-    border: 10px solid black !important;
+.selected {}
+
+#side_container {
+    display: flex;
+    justify-content: center;
+}
+
+.sides {
+    border: 2px dotted black;
+    font-size: 1.5em;
+    cursor: pointer;
+    width: 127px;
+    height: 71px;
+    margin: 5px;
+    text-align: center;
+}
+
+#radiant {
+    margin-right: 0px;
+}
+
+#dire {
+    margin-left: 0px;
+}
+
+.side_selected {
+    border: 2px solid black;
 }

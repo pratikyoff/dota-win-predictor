@@ -13,23 +13,34 @@
 <body>
     <header>Dota Win Predictor</header>
     <div id="input-container">
-        <div class="input_image" id="own_hero"></div>
+        <div class="input_image" id="in0"></div>
         <div id="ally_container">
-            <div class="input_image" id="ally1"></div>
-            <div class="input_image" id="ally3"></div>
-            <div class="input_image" id="ally2"></div>
-            <div class="input_image" id="ally4"></div>
+            <div class="input_image" id="in1"></div>
+            <div class="input_image" id="in2"></div>
+            <div class="input_image" id="in3"></div>
+            <div class="input_image" id="in4"></div>
         </div>
         <div id="enemy_container">
-            <div class="input_image" id="enemy1"></div>
-            <div class="input_image" id="enemy2"></div>
-            <div class="input_image" id="enemy3"></div>
-            <div class="input_image" id="enemy4"></div>
-            <div class="input_image" id="enemy5"></div>
+            <div class="input_image" id="in5"></div>
+            <div class="input_image" id="in6"></div>
+            <div class="input_image" id="in7"></div>
+            <div class="input_image" id="in8"></div>
+            <div class="input_image" id="in9"></div>
+        </div>
+        <div id="side_container">
+            <span id="radiant" class="sides side_selected">Radiant</span><span id="dire" class="sides">Dire</span>
+        </div>
+        <div>
+            <span>Steam Id</span>
+            <input type="number" id="steam_id_input">
         </div>
     </div>
+    <hr>
     <div id="hero-container"></div>
-    <div id="result-container">qwer</div>
+    <div id="result-container">
+        <button onclick="submit()">Find My Win Chance</button>
+        <div id="result"></div>
+    </div>
 </body>
 
 </html>

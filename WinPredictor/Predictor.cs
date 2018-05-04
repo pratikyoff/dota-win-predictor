@@ -1,50 +1,47 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Accord.MachineLearning.VectorMachines.Learning;
-using Accord.Statistics.Kernels;
-using Accord.MachineLearning.VectorMachines;
+using System;
+using WinPredictor.Interfaces;
+using WinPredictor.Algos;
 
 namespace WinPredictor
 {
     public class Predictor
     {
+        public static int CurrentIteration { get; private set; }
+        public static int TotalIterations { get; private set; }
+
         public async Task<double> Predict(List<int> inputToPredict, string steamId)
         {
-            SupportVectorMachine<Gaussian> svm;
+            CurrentIteration = 0;
+            TotalIterations = 0;
+
+            IAlgorithm mlAlgorithm;
             if (MLEngineStore.Store.ContainsKey(steamId))
             {
-                svm = MLEngineStore.Store[steamId];
+                mlAlgorithm = MLEngineStore.Store[steamId];
             }
             else
             {
-                var input = await GetInput(steamId);
-                var output = await GetOutput(steamId);
+                mlAlgorithm = new SMOAlgo();
+                MLEngineStore.Store.Add(steamId, mlAlgorithm);
 
-                var teacher = new SequentialMinimalOptimization<Gaussian>()
+
+                foreach (var learnCase in GetLearnCases(steamId))
                 {
-                    UseComplexityHeuristic = true,
-                    UseKernelEstimation = true
-                };
-
-                svm = teacher.Learn(input, output);
-                MLEngineStore.Store.Add(steamId, svm);
+                    mlAlgorithm.Learn(learnCase.Input, learnCase.Output);
+                    CurrentIteration++;
+                }
             }
 
-            double[] convertedInputToPredict = ConvertToDoubleArray(inputToPredict);
-
-            var result = svm.Probability(convertedInputToPredict);
+            var result = mlAlgorithm.CalculteOutput(inputToPredict);
 
             return result;
         }
 
-        private double[] ConvertToDoubleArray(List<int> list)
+        private IEnumerable<LearnCase> GetLearnCases(string steamId)
         {
-            var array = new double[list.Count];
-            for (int i = 0; i < list.Count; i++)
-            {
-                array[i] = list[i];
-            }
-            return array;
+            throw new NotImplementedException();
         }
 
         private async Task<int[]> GetOutput(string steamId)

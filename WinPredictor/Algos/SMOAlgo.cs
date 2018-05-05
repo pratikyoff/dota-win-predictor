@@ -29,8 +29,8 @@ namespace WinPredictor.Algos
 
         public void Learn(IEnumerable<int> input, int output)
         {
-            var inputForLearning = new double[1][] { GetDoubleArray(input) };
-            _supportVectorMachine = _teacher.Learn(inputForLearning, new double[1] { output });
+            var inputForLearning = new double[][] { GetDoubleArray(input) };
+            _supportVectorMachine = _teacher.Learn(inputForLearning, new double[] { output });
         }
 
         private double[] GetDoubleArray(IEnumerable<int> input)

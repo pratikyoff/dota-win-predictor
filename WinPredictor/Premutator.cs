@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace WinPredictor
@@ -29,6 +30,27 @@ namespace WinPredictor
             }
 
             return newPermutations;
+        }
+
+        public static List<List<int>> PermuteMatch(List<int> matchInput)
+        {
+            int heroId = matchInput.First();
+            var allyPermutations = Permute(matchInput.GetRange(1, 4));
+            var enemyPermutations = Permute(matchInput.GetRange(5, 5));
+            var isRadiant = matchInput.Last();
+            List<List<int>> validPermutations = new List<List<int>>();
+            foreach (var allyPermutation in allyPermutations)
+            {
+                foreach (var enemyPermutation in enemyPermutations)
+                {
+                    List<int> singlePermutation = new List<int>() { heroId };
+                    singlePermutation.AddRange(allyPermutation);
+                    singlePermutation.AddRange(enemyPermutation);
+                    singlePermutation.Add(isRadiant);
+                    validPermutations.Add(singlePermutation);
+                }
+            }
+            return validPermutations;
         }
     }
 }

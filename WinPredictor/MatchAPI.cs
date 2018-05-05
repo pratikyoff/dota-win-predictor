@@ -15,6 +15,7 @@ namespace WinPredictor
         {
             var response = await httpClient.GetStringAsync($"https://api.opendota.com/api/players/{steamId}/matches");
             var json = JsonConvert.DeserializeObject<dynamic>(response);
+            Store.SteamIdToPlayerMatchInfo[steamId] = json;
             return json;
         }
 

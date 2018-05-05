@@ -3,19 +3,16 @@ using System.Threading.Tasks;
 using System;
 using WinPredictor.Interfaces;
 using WinPredictor.Algos;
+using System.Threading;
 
 namespace WinPredictor
 {
     public class Predictor
     {
-        public static int CurrentIteration { get; private set; }
-        public static int TotalIterations { get; private set; }
+        public int CurrentIteration { get; private set; }
 
-        public async Task<double> Predict(List<int> inputToPredict, string steamId)
+        public double Predict(List<int> inputToPredict, string steamId)
         {
-            CurrentIteration = 0;
-            TotalIterations = 0;
-
             IAlgorithm mlAlgorithm;
             if (MLEngineStore.Store.ContainsKey(steamId))
             {
@@ -25,7 +22,6 @@ namespace WinPredictor
             {
                 mlAlgorithm = new SMOAlgo();
                 MLEngineStore.Store.Add(steamId, mlAlgorithm);
-
 
                 foreach (var learnCase in GetLearnCases(steamId))
                 {
@@ -41,43 +37,89 @@ namespace WinPredictor
 
         private IEnumerable<LearnCase> GetLearnCases(string steamId)
         {
-            throw new NotImplementedException();
-        }
+            var basicMatchDetailsArray = MatchAPI.GetBasicInfoOfAllMatchesOfPlayer(steamId).GetAwaiter().GetResult();
 
-        private async Task<int[]> GetOutput(string steamId)
-        {
-            InOutBuilder inputBuilder = new InOutBuilder();
-            var output = await inputBuilder.BuildOutput(steamId);
-            //var outputArray = new int[output.Count * 2880];
-            //for (int i = 0; i < output.Count; i++)
-            //{
-            //    for (int j = 0; j < 2880; j++)
-            //    {
-            //        outputArray[(i * 2880) + j] = output[i];
-            //    }
-            //}
-            //return outputArray;
-            return output.ToArray();
-        }
-
-        private async Task<double[][]> GetInput(string steamId)
-        {
-            InOutBuilder inputBuilder = new InOutBuilder();
-            var input = await inputBuilder.BuildInput(steamId);
-
-            var convertedInput = new double[input.Count][];
-
-            for (int i = 0; i < input.Count; i++)
+            foreach (var match in basicMatchDetailsArray)
             {
-                var permutation = new double[input[i].Count];
-                for (int j = 0; j < input[i].Count; j++)
-                {
-                    permutation[j] = input[i][j];
-                }
-                convertedInput[i] = permutation;
-            }
+                string matchId = (string)match.match_id;
+                dynamic matchDetails = null;
 
-            return convertedInput;
+                #region Getting match details
+                bool retry = true;
+                int counter = 0;
+                while (retry)
+                {
+                    try
+                    {
+                        matchDetails = MatchAPI.GetMatchDetails(matchId).GetAwaiter().GetResult();
+                        retry = false;
+                    }
+                    catch (Exception exception)
+                    {
+                        counter++;
+                        retry = true;
+                        if (counter > 10)
+                            throw exception;
+                        Thread.Sleep(counter * 1000);
+                    }
+                }
+                #endregion
+
+                List<int> inputToPermute = new List<int>();
+
+                #region input list calculation
+                //Calculating the input list
+                int ownHeroId = 0;
+                List<int> allyHeroIds = new List<int>();
+                List<int> enemyHeroIds = new List<int>();
+                bool isRadiant = false;
+                int radiantOrDire = 0;
+                foreach (var playerInfo in matchDetails.players)
+                {
+                    if ((string)playerInfo.account_id == steamId)
+                    {
+                        ownHeroId = playerInfo.hero_id;
+                        isRadiant = playerInfo.isRadiant;
+                        radiantOrDire = isRadiant ? 0 : 1;
+                        break;
+                    }
+                }
+                foreach (var playerInfo in matchDetails.players)
+                {
+                    if ((string)playerInfo.account_id != steamId)
+                    {
+                        if (playerInfo.isRadiant == isRadiant)
+                        {
+                            allyHeroIds.Add((int)playerInfo.hero_id);
+                        }
+                        else
+                        {
+                            enemyHeroIds.Add((int)playerInfo.hero_id);
+                        }
+                    }
+                }
+                inputToPermute.Add(ownHeroId);
+                inputToPermute.AddRange(allyHeroIds);
+                inputToPermute.AddRange(enemyHeroIds);
+                inputToPermute.Add(radiantOrDire);
+                #endregion
+
+                #region output calculation
+                int win = isRadiant == (bool)matchDetails.radiant_win ? 1 : 0;
+                #endregion
+
+                var permutations = Permutator.PermuteMatch(inputToPermute);
+
+                foreach (var permutation in permutations)
+                {
+                    LearnCase learnCase = new LearnCase()
+                    {
+                        Input = permutation.ToArray(),
+                        Output = win
+                    };
+                    yield return learnCase;
+                }
+            }
         }
     }
 }

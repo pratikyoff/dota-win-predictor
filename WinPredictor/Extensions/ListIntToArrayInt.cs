@@ -12,8 +12,9 @@ namespace WinPredictor.Extensions
             List<double> doubleList = new List<double>();
             foreach (var item in intEnumerable)
             {
-
+                doubleList.Add(item);
             }
+            return doubleList.ToArray();
         }
     }
 }
